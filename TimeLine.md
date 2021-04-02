@@ -4,7 +4,10 @@
   - Sudoku类：
     - 将matrix原有数据结构更改为square(==vector\<vector\<char\>\>)
   - Sudoku_Gen类：
-    - square GenFinal_Violent，生成一个填满的9*9数独终局来满足需求，暂时意义不明，考虑可能用数独终局挖空来产生一个数独。
+    - 目前打算生成一个填满的9*9数独终局来满足需求，暂时意义不明，考虑可能用数独终局挖空来产生一个数独。
+    - GenFinal_Violent，暴力生成一个不满足九宫格要求的数独终局
+    - GenFinal_Elegant，对已有的一个数独终局(Starting.ini)作行列变换来使其成为另一个数独终局
+      - 及其附属行列变换函数swap_row、swap_col、swap_row_chunk、swap_col_chunk
 
 ## 2021/04/01
 

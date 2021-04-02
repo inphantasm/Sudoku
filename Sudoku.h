@@ -1,7 +1,8 @@
 #pragma once
+#include<ctime>
+#include<fstream>
 #include<iostream>
 #include<vector>
-#include<ctime>
 #define square vector<vector<char>>
 using namespace std;
 class Sudoku
