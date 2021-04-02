@@ -1,3 +1,11 @@
+## 2021/04/02
+
+- 基本内容
+  - Sudoku类：
+    - 将matrix原有数据结构更改为square(==vector\<vector\<char\>\>)
+  - Sudoku_Gen类：
+    - square GenFinal_Violent，生成一个填满的9*9数独终局来满足需求，暂时意义不明，考虑可能用数独终局挖空来产生一个数独。
+
 ## 2021/04/01
 
 - 建立项目

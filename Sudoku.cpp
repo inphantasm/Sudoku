@@ -1,8 +1,9 @@
 #include "Sudoku.h"
 Sudoku::Sudoku()
 {
-	memset(matrix, '#', 81);
+	matrix = square(9, vector<char>(9, '#'));
 	blank = 81;
+	// cout << "Sudoku Created." << endl;
 }
 Sudoku::~Sudoku()
 {

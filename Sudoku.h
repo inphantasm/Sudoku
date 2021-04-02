@@ -1,10 +1,13 @@
 #pragma once
 #include<iostream>
+#include<vector>
+#include<ctime>
+#define square vector<vector<char>>
 using namespace std;
 class Sudoku
 {
 public:
-	char matrix[9][9];
+	square matrix;
 	int blank;
 	Sudoku();
 	~Sudoku();
