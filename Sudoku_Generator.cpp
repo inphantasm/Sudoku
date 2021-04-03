@@ -53,20 +53,19 @@ square Sudoku_Gen::GenFinal_Elegant(int transform)
 {
 	/*
 	 * 读取初始终局
-	 * 您可以自行写入一个终局，本程序保证将其改得面目全非
+	 * 您可以自行写入一个终局，本方法保证将其改得面目全非
 	*/
 	srand(unsigned int(time(NULL)));
 	ifstream fin("Starting.ini");
-	square result(9, vector<char>(9, '#'));
 	for (int i = 0; i < 9; i++)
 	{
 		for (int j = 0; j < 9; j++)
 		{
-			fin >> result[i][j];
+			fin >> matrix[i][j];
 		}
 	}
 	/*
-	 * 根据参数transform决定随机变化的次数，缺省为100次
+	 * 根据参数transform决定随机变化的次数，缺省为1000次
 	*/
 	while (transform--)
 	{
@@ -75,24 +74,24 @@ square Sudoku_Gen::GenFinal_Elegant(int transform)
 		switch (method)
 		{
 		case 0:
-			transform += swap_row(result, arg1, arg2);
+			transform += swap_row(arg1, arg2);
 			break;
 		case 1:
-			transform += swap_col(result, arg1, arg2);
+			transform += swap_col(arg1, arg2);
 			break;
 		case 2:
-			transform += swap_row_chunk(result, arg1 % 3, arg2 % 3);
+			transform += swap_row_chunk(arg1 % 3, arg2 % 3);
 			break;
 		case 3:
-			transform += swap_col_chunk(result, arg1 % 3, arg2 % 3);
+			transform += swap_col_chunk(arg1 % 3, arg2 % 3);
 			break;
 		default:
 			break;
 		}
 	}
-	return result;
+	return matrix;
 }
-bool Sudoku_Gen::swap_row(square& matrix, int line1, int line2, bool ANY)
+bool Sudoku_Gen::swap_row(int line1, int line2, bool ANY)
 {
 	if (ANY || line1 / 3 == line2 / 3)
 	{
@@ -107,7 +106,7 @@ bool Sudoku_Gen::swap_row(square& matrix, int line1, int line2, bool ANY)
 	else
 		return 1;
 }
-bool Sudoku_Gen::swap_col(square& matrix, int line1, int line2, bool ANY)
+bool Sudoku_Gen::swap_col(int line1, int line2, bool ANY)
 {
 	if (ANY || line1 / 3 == line2 / 3)
 	{
@@ -122,19 +121,51 @@ bool Sudoku_Gen::swap_col(square& matrix, int line1, int line2, bool ANY)
 	else
 		return 1;
 }
-bool Sudoku_Gen::swap_row_chunk(square& matrix, int line1, int line2)
+bool Sudoku_Gen::swap_row_chunk(int line1, int line2)
 {
 	for (int i = 0; i < 3; i++)
 	{
-		swap_row(matrix, line1 * 3 + i, line2 * 3 + i, true);
+		swap_row(line1 * 3 + i, line2 * 3 + i, true);
 	}
 	return 0;
 }
-bool Sudoku_Gen::swap_col_chunk(square& matrix, int line1, int line2)
+bool Sudoku_Gen::swap_col_chunk(int line1, int line2)
 {
 	for (int i = 0; i < 3; i++)
 	{
-		swap_col(matrix, line1 * 3 + i, line2 * 3 + i, true);
+		swap_col(line1 * 3 + i, line2 * 3 + i, true);
 	}
 	return 0;
+}
+bool Sudoku_Gen::unique_excision(int count)
+{
+	srand(unsigned int(time(NULL)));
+	/*
+	 * 打乱顺序
+	*/
+	vector<pair<int, int>> pos;
+	for (int i = 0; i < 9; i++)
+	{
+		for (int j = 0; j < 9; j++)
+		{
+			pos.push_back(make_pair(i, j));
+		}
+	}
+	random_shuffle(pos.begin(), pos.end());
+	for(auto p : pos)
+	{
+		/*
+		 * 挖空唯一可能的点
+		 * 后续的挖掘工作会影响前面的点，但是理论上说这样挖
+		 * 一定会有至少一个“线头”，因此是唯一的
+		*/
+		int i = p.first, j = p.second;
+		if (matrix[i][j] == '#') continue;
+		if (Possibility(i, j).size() == 1)
+		{
+			matrix[i][j] = '#';
+			if (!(--count))
+				return true;
+		}
+	}
 }

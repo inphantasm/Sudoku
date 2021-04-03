@@ -1,4 +1,5 @@
 #pragma once
+#include<algorithm>
 #include<ctime>
 #include<fstream>
 #include<iostream>
@@ -12,4 +13,5 @@ public:
 	int blank;
 	Sudoku();
 	~Sudoku();
+	vector<int> Possibility(int x, int y);
 };
