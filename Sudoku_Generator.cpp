@@ -1,5 +1,24 @@
 #include "Sudoku_Generator.h"
 
+Sudoku_Gen::Sudoku_Gen(bool Unique):
+	Sudoku()
+{
+	ifstream fin("Difficulty.ini");
+	for (int i = 0; i < 4; i++)
+	{
+		int x, y;
+		fin >> x >> y;
+		if (Unique) y = 0;
+		difficulty.push_back(make_pair(x, y));
+	}
+}
+bool Sudoku_Gen::Sudoku_Init(int diff)
+{
+	GenFinal_Elegant();
+	unique_excision(difficulty[diff].first);
+	random_excision(difficulty[diff].second);
+	return true;
+}
 square Sudoku_Gen::GenFinal_Violent(int tolerance)
 /*
  * 生成一个数独终局
@@ -91,6 +110,65 @@ square Sudoku_Gen::GenFinal_Elegant(int transform)
 	}
 	return matrix;
 }
+bool Sudoku_Gen::unique_excision(int count)
+{
+	srand(unsigned int(time(NULL)));
+	/*
+	 * 打乱顺序
+	*/
+	vector<pair<int, int>> pos;
+	for (int i = 0; i < 9; i++)
+	{
+		for (int j = 0; j < 9; j++)
+		{
+			pos.push_back(make_pair(i, j));
+		}
+	}
+	random_shuffle(pos.begin(), pos.end());
+	for(auto p : pos)
+	{
+		/*
+		 * 挖空唯一可能的点
+		 * 后续的挖掘工作会影响前面的点，但是理论上说这样挖
+		 * 一定会有至少一个“线头”，因此是唯一的
+		*/
+		int i = p.first, j = p.second;
+		if (matrix[i][j] == '#') continue;
+		if (Possibility(i, j).size() == 1)
+		{
+			matrix[i][j] = '#';
+			if (!(--count))
+				return true;
+		}
+	}
+	return false;
+}
+bool Sudoku_Gen::random_excision(int count)
+/*
+ * 本方法**不保证**生成一个有解的数独！
+ * 至少在完成Sudoku_Sol之前不保证。
+*/ 
+{
+	if (count == 0) return true;
+	vector<pair<int, int>> pos;
+	for (int i = 0; i < 9; i++)
+	{
+		for (int j = 0; j < 9; j++)
+		{
+			pos.push_back(make_pair(i, j));
+		}
+	}
+	random_shuffle(pos.begin(), pos.end());
+	for (auto p : pos)
+	{
+		int i = p.first, j = p.second;
+		if (matrix[i][j] == '#') continue;
+		matrix[i][j] = '#';
+		if (!(--count))
+			return true;
+	}
+	return false;
+}
 bool Sudoku_Gen::swap_row(int line1, int line2, bool ANY)
 {
 	if (ANY || line1 / 3 == line2 / 3)
@@ -136,36 +214,4 @@ bool Sudoku_Gen::swap_col_chunk(int line1, int line2)
 		swap_col(line1 * 3 + i, line2 * 3 + i, true);
 	}
 	return 0;
-}
-bool Sudoku_Gen::unique_excision(int count)
-{
-	srand(unsigned int(time(NULL)));
-	/*
-	 * 打乱顺序
-	*/
-	vector<pair<int, int>> pos;
-	for (int i = 0; i < 9; i++)
-	{
-		for (int j = 0; j < 9; j++)
-		{
-			pos.push_back(make_pair(i, j));
-		}
-	}
-	random_shuffle(pos.begin(), pos.end());
-	for(auto p : pos)
-	{
-		/*
-		 * 挖空唯一可能的点
-		 * 后续的挖掘工作会影响前面的点，但是理论上说这样挖
-		 * 一定会有至少一个“线头”，因此是唯一的
-		*/
-		int i = p.first, j = p.second;
-		if (matrix[i][j] == '#') continue;
-		if (Possibility(i, j).size() == 1)
-		{
-			matrix[i][j] = '#';
-			if (!(--count))
-				return true;
-		}
-	}
 }
