@@ -17,7 +17,15 @@ bool Sudoku_Gen::Sudoku_Init(int diff)
 	GenFinal_Elegant();
 	unique_excision(difficulty[diff].first);
 	random_excision(difficulty[diff].second);
+	output();
 	return true;
+}
+Sudoku Sudoku_Gen::Sudokize()
+{
+	Sudoku result;
+	result.blank = this->blank;
+	result.matrix = this->matrix;
+	return result;
 }
 square Sudoku_Gen::GenFinal_Violent(int tolerance)
 /*
@@ -108,6 +116,7 @@ square Sudoku_Gen::GenFinal_Elegant(int transform)
 			break;
 		}
 	}
+	output();
 	return matrix;
 }
 bool Sudoku_Gen::unique_excision(int count)
@@ -130,13 +139,14 @@ bool Sudoku_Gen::unique_excision(int count)
 		/*
 		 * 挖空唯一可能的点
 		 * 后续的挖掘工作会影响前面的点，但是理论上说这样挖
-		 * 一定会有至少一个“线头”，因此是唯一的
+		 * 一定会有至少一个“线头”，因此是有唯一解的
 		*/
 		int i = p.first, j = p.second;
 		if (matrix[i][j] == '#') continue;
 		if (Possibility(i, j).size() == 1)
 		{
 			matrix[i][j] = '#';
+			blank++;
 			if (!(--count))
 				return true;
 		}
@@ -164,6 +174,7 @@ bool Sudoku_Gen::random_excision(int count)
 		int i = p.first, j = p.second;
 		if (matrix[i][j] == '#') continue;
 		matrix[i][j] = '#';
+		blank++;
 		if (!(--count))
 			return true;
 	}

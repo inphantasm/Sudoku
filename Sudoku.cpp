@@ -43,3 +43,15 @@ vector<int> Sudoku::Possibility(int x, int y)
 	}
 	return result;
 }
+void Sudoku::output()
+{
+	for (int i = 0; i < 9; i++)
+	{
+		for (int j = 0; j < 9; j++)
+		{
+			cout << char(matrix[i][j]) << " ";
+		}
+		cout << endl;
+	}
+	cout << endl;
+}

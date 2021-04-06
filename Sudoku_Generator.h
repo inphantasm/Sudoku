@@ -7,6 +7,7 @@ public:
 
 	Sudoku_Gen(bool Unique = false);
 	bool Sudoku_Init(int diff);
+	Sudoku Sudokize();
 private:
 	square GenFinal_Violent(int tolerance = 22);
 	square GenFinal_Elegant(int transform = 1000);

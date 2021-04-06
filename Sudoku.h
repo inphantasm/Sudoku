@@ -14,4 +14,5 @@ public:
 	Sudoku();
 	~Sudoku();
 	vector<int> Possibility(int x, int y);
+	void output();
 };
