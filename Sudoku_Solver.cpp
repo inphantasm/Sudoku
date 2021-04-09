@@ -6,48 +6,12 @@ Sudoku_Sol::Sudoku_Sol(Sudoku S)
 	matrix = S.matrix;
 	success = false;
 }
-Sudoku_Sol::Sudoku_Sol() :
-	Sudoku()
-{
-	success = false;
-}
-void Sudoku_Sol::ReadSudoku(string filename)
-{
-	ifstream fin(filename);
-	for (int i = 0; i < 9; i++)
-	{
-		for (int j = 0; j < 9; j++)
-		{
-			fin >> matrix[i][j];
-		}
-	}
-}
-bool Sudoku_Sol::InvalidCheck()
-{
-	for (int i = 0; i < 9; i++)
-	{
-		for (int j = 0; j < 9; j++)
-		{
-			vector<int> n = Possibility(i, j);
-			if (n.size() == 0) return false;
-			bool flag = true;
-			for (auto num : n)
-			{
-				if (num == matrix[i][j] - '0')
-				{
-					flag = false;
-				}
-			}
-			if (flag) return false;
-		}
-	}
-	return true;
-}
 void Sudoku_Sol::solve(int dfs)
 {
 	if (dfs == 81)
 	{
 		success = true;
+		output();
 		return;
 	}
 	if (matrix[dfs / 9][dfs % 9] != '#')
