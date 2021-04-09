@@ -17,7 +17,6 @@ bool Sudoku_Gen::Sudoku_Init(int diff)
 	GenFinal_Elegant();
 	unique_excision(difficulty[diff].first);
 	random_excision(difficulty[diff].second);
-	output();
 	return true;
 }
 Sudoku Sudoku_Gen::Sudokize()
@@ -116,7 +115,6 @@ square Sudoku_Gen::GenFinal_Elegant(int transform)
 			break;
 		}
 	}
-	output();
 	return matrix;
 }
 bool Sudoku_Gen::unique_excision(int count)
