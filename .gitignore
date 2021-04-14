@@ -1,0 +1,11 @@
+﻿################################################################################
+# 此 .gitignore 文件已由 Microsoft(R) Visual Studio 自动创建。
+################################################################################
+
+/sudo/sudo.cpp
+/sudo/sudo.sln
+/sudo/Debug
+/sudo/Difficulty.ini
+/sudo/.vs/sudo/v16
+/sudo
+/.vs
