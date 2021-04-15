@@ -1,25 +1,39 @@
 #include "Sudoku_Generator.h"
 
-Sudoku_Gen::Sudoku_Gen(bool Unique):
+Sudoku_Gen::Sudoku_Gen() :
 	Sudoku()
 {
+	srand(unsigned int(time(NULL)));
+	ifstream fin("Starting.ini");
+	for (int i = 0; i < 9; i++)
+	{
+		for (int j = 0; j < 9; j++)
+		{
+			fin >> matrix[i][j];
+		}
+	}
+}
+bool Sudoku_Gen::Sudoku_Init(int diff, int unique)
+{
+	GenFinal_Elegant();
+	// 这一部分拿走
 	ifstream fin("Difficulty.ini");
 	for (int i = 0; i < 4; i++)
 	{
 		int x, y;
 		fin >> x >> y;
-		if (Unique) y = 0;
+		if (unique) y = 0;
+		// y = 0 - 唯一解
 		difficulty.push_back(make_pair(x, y));
 	}
-}
-bool Sudoku_Gen::Sudoku_Init(int diff)
-{
-	GenFinal_Elegant();
 	unique_excision(difficulty[diff].first);
 	random_excision(difficulty[diff].second);
 	output();
+	output2files();
+	difficulty.erase(difficulty.begin(), difficulty.end());
 	return true;
 }
+
 Sudoku Sudoku_Gen::Sudokize()
 {
 	Sudoku result;
@@ -27,7 +41,7 @@ Sudoku Sudoku_Gen::Sudokize()
 	result.matrix = this->matrix;
 	return result;
 }
-square Sudoku_Gen::GenFinal_Violent(int tolerance)
+bool Sudoku_Gen::GenFinal_Violent(int tolerance)
 /*
  * 生成一个数独终局
  * 无法满足九宫格法则
@@ -35,7 +49,7 @@ square Sudoku_Gen::GenFinal_Violent(int tolerance)
 */
 {
 	srand(unsigned int(time(NULL)));
-	square result(9, vector<char>(9, '#'));
+	square result(9, vector<char>(9, '$'));
 	int tries = 0;
 	for (int i = 0; i < 9; i++)
 	{
@@ -74,23 +88,14 @@ square Sudoku_Gen::GenFinal_Violent(int tolerance)
 			curTries = tries;
 		}
 	}
-	return result;
+	return true;
 }
-square Sudoku_Gen::GenFinal_Elegant(int transform)
+bool Sudoku_Gen::GenFinal_Elegant(int transform)
 {
 	/*
 	 * 读取初始终局
 	 * 您可以自行写入一个终局，本方法保证将其改得面目全非
 	*/
-	srand(unsigned int(time(NULL)));
-	ifstream fin("Starting.ini");
-	for (int i = 0; i < 9; i++)
-	{
-		for (int j = 0; j < 9; j++)
-		{
-			fin >> matrix[i][j];
-		}
-	}
 	/*
 	 * 根据参数transform决定随机变化的次数，缺省为1000次
 	*/
@@ -116,8 +121,9 @@ square Sudoku_Gen::GenFinal_Elegant(int transform)
 			break;
 		}
 	}
-	output();
-	return matrix;
+
+	//output();
+	return true;
 }
 bool Sudoku_Gen::unique_excision(int count)
 {
@@ -134,7 +140,7 @@ bool Sudoku_Gen::unique_excision(int count)
 		}
 	}
 	random_shuffle(pos.begin(), pos.end());
-	for(auto p : pos)
+	for (auto p : pos)
 	{
 		/*
 		 * 挖空唯一可能的点
@@ -142,10 +148,10 @@ bool Sudoku_Gen::unique_excision(int count)
 		 * 一定会有至少一个“线头”，因此是有唯一解的
 		*/
 		int i = p.first, j = p.second;
-		if (matrix[i][j] == '#') continue;
+		if (matrix[i][j] == '$') continue;
 		if (Possibility(i, j).size() == 1)
 		{
-			matrix[i][j] = '#';
+			matrix[i][j] = '$';
 			blank++;
 			if (!(--count))
 				return true;
@@ -157,7 +163,7 @@ bool Sudoku_Gen::random_excision(int count)
 /*
  * 本方法**不保证**生成一个有解的数独！
  * 至少在完成Sudoku_Sol之前不保证。
-*/ 
+*/
 {
 	if (count == 0) return true;
 	vector<pair<int, int>> pos;
@@ -172,8 +178,8 @@ bool Sudoku_Gen::random_excision(int count)
 	for (auto p : pos)
 	{
 		int i = p.first, j = p.second;
-		if (matrix[i][j] == '#') continue;
-		matrix[i][j] = '#';
+		if (matrix[i][j] == '$') continue;
+		matrix[i][j] = '$';
 		blank++;
 		if (!(--count))
 			return true;

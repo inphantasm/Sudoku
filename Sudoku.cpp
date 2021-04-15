@@ -1,7 +1,7 @@
 #include "Sudoku.h"
 Sudoku::Sudoku()
 {
-	matrix = square(9, vector<char>(9, '#'));
+	matrix = square(9, vector<char>(9, '$'));
 	blank = 81;
 	// cout << "Sudoku Created." << endl;
 }
@@ -18,13 +18,13 @@ vector<int> Sudoku::Possibility(int x, int y)
 	for (int i = 0; i < 9; i++)
 	{
 		if (i == y) continue;
-		int E = matrix[x][i] == '#' ? 0 : matrix[x][i] - '0';
+		int E = matrix[x][i] == '$' ? 0 : matrix[x][i] - '0';
 		exist[E] = 1;
 	}
 	for (int i = 0; i < 9; i++)
 	{
 		if (i == x) continue;
-		int E = matrix[i][y] == '#' ? 0 : matrix[i][y] - '0';
+		int E = matrix[i][y] == '$' ? 0 : matrix[i][y] - '0';
 		exist[E] = 1;
 	}
 	for (int i = blockx * 3; i < blockx * 3 + 3; i++)
@@ -32,7 +32,7 @@ vector<int> Sudoku::Possibility(int x, int y)
 		for (int j = blocky * 3; j < blocky * 3 + 3; j++)
 		{
 			if (i == x && j == y) continue;
-			int E = matrix[i][j] == '#' ? 0 : matrix[i][j] - '0';
+			int E = matrix[i][j] == '$' ? 0 : matrix[i][j] - '0';
 			exist[E] = 1;
 		}
 	}
@@ -54,4 +54,20 @@ void Sudoku::output()
 		cout << endl;
 	}
 	cout << endl;
+}
+void Sudoku::output2files() {
+	ofstream fout("game.txt", ios_base::app);
+	if (!fout) {
+		cout << endl << "文件打开失败" << endl;
+		exit(1);
+	}
+	fout << '\n';
+	for (int i = 0; i < 9; i++)
+	{
+		for (int j = 0; j < 9; j++)
+		{
+			fout << char(matrix[i][j]) << " ";
+		}
+		fout << '\n';
+	}
 }

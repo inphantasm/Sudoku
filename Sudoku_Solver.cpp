@@ -14,12 +14,16 @@ Sudoku_Sol::Sudoku_Sol() :
 void Sudoku_Sol::ReadSudoku(string filename)
 {
 	ifstream fin(filename);
-	for (int i = 0; i < 9; i++)
-	{
-		for (int j = 0; j < 9; j++)
+	while (fin) {
+		for (int i = 0; i < 9; i++)
 		{
-			fin >> matrix[i][j];
+			for (int j = 0; j < 9; j++)
+			{
+				fin >> matrix[i][j];
+			}
 		}
+		output();
+		solve();
 	}
 }
 bool Sudoku_Sol::InvalidCheck()
@@ -51,7 +55,7 @@ void Sudoku_Sol::solve(int dfs)
 		output();
 		return;
 	}
-	if (matrix[dfs / 9][dfs % 9] != '#')
+	if (matrix[dfs / 9][dfs % 9] != '$')
 	{
 		solve(dfs + 1);
 		return;
@@ -62,6 +66,6 @@ void Sudoku_Sol::solve(int dfs)
 		matrix[dfs / 9][dfs % 9] = num + '0';
 		solve(dfs + 1);
 		if (success) return;
-		matrix[dfs / 9][dfs % 9] = '#';
+		matrix[dfs / 9][dfs % 9] = '$';
 	}
 }
