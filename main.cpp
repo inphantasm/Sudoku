@@ -11,7 +11,6 @@ int main(int argc, char** argv)
 	int game_num = 0;
 	// 默认游戏难度为1-简单
 	int game_level = 1;
-	//int blank_num;
 	vector<string> argvs;
 
 	int j = 1;

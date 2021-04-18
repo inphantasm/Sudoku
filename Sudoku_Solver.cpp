@@ -13,8 +13,9 @@ Sudoku_Sol::Sudoku_Sol() :
 }
 void Sudoku_Sol::ReadSudoku(string filename)
 {
+	square tempmatrix = matrix;
 	ifstream fin(filename);
-	while (fin) {
+	while (!fin.eof()/*.peek() != EOF*/) {
 		for (int i = 0; i < 9; i++)
 		{
 			for (int j = 0; j < 9; j++)
@@ -22,8 +23,13 @@ void Sudoku_Sol::ReadSudoku(string filename)
 				fin >> matrix[i][j];
 			}
 		}
+		if (matrix == tempmatrix)
+			return;
 		output();
-		solve();
+		if (InvalidCheck())
+			solve();
+		else cout << "-----the Sudoku is invalid-----" << endl;
+		matrix = tempmatrix;
 	}
 }
 bool Sudoku_Sol::InvalidCheck()
@@ -35,6 +41,7 @@ bool Sudoku_Sol::InvalidCheck()
 			vector<int> n = Possibility(i, j);
 			if (n.size() == 0) return false;
 			bool flag = true;
+			if (matrix[i][j] == '$') continue;
 			for (auto num : n)
 			{
 				if (num == matrix[i][j] - '0')
