@@ -57,9 +57,8 @@ void Sudoku::output()
 }
 void Sudoku::output2files() {
 	ofstream fout("game.txt", ios_base::app);
-	if (!fout) {
-		cout << endl << "文件打开失败" << endl;
-		exit(1);
+	if (!fout.is_open()) {
+		throw "file create falied";
 	}
 	fout << '\n';
 	for (int i = 0; i < 9; i++)

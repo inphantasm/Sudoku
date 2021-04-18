@@ -15,6 +15,8 @@ void Sudoku_Sol::ReadSudoku(string filename)
 {
 	square tempmatrix = matrix;
 	ifstream fin(filename);
+	if (!fin.is_open())
+		throw "game.txt open failed";
 	while (!fin.eof()/*.peek() != EOF*/) {
 		for (int i = 0; i < 9; i++)
 		{
@@ -31,6 +33,7 @@ void Sudoku_Sol::ReadSudoku(string filename)
 		else cout << "-----the Sudoku is invalid-----" << endl;
 		matrix = tempmatrix;
 	}
+	fin.close();
 }
 bool Sudoku_Sol::InvalidCheck()
 {
