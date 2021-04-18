@@ -22,12 +22,14 @@ int main(int argc, char** argv)
 				throw "-c: less argument";
 			string  str(argvs[1]);
 			fina_sudo_num = atoi(str.c_str());
+			if (fina_sudo_num < 1 || fina_sudo_num > 10000000)
+				throw "-c: invalid argument";
 			Sudoku_Gen Gen;
 			square tempmatrix = Gen.matrix;
 			while (fina_sudo_num) {
 				Gen.GenFinal_Elegant();
-				cout << endl << "end: " << fina_sudo_num << endl << endl;
-				Gen.output();
+				// cout << endl << "end: " << fina_sudo_num << endl << endl;
+				Gen.output2files("game.txt");
 				Gen.matrix = tempmatrix;
 				fina_sudo_num--;
 			}
@@ -68,11 +70,11 @@ int main(int argc, char** argv)
 				}
 				// 难度设定-difficulty.ini
 				else if (*ite == "-m") {
-					if (*ite != "1" || *ite != "2" || *ite != "3")
+					ite++;
+					if (*ite != "1" && *ite != "2" && *ite != "3")
 						throw "-m: invalid arguments";
-					string  str(*(ite + 1));
+					string str(*ite);
 					game_level = atoi(str.c_str());
-					ite += 1;
 				}
 
 				else if (*ite == "-u") {
@@ -83,7 +85,7 @@ int main(int argc, char** argv)
 			Sudoku_Gen Gen;
 			square tempmatrix = Gen.matrix;
 			while (game_num--) {
-				cout << endl << "game: " << game_num + 1 << endl;
+				// cout << endl << "game: " << game_num + 1 << endl;
 				Gen.Sudoku_Init(game_level, unique_flag);
 				Gen.matrix = tempmatrix;
 			}
@@ -99,17 +101,21 @@ int main(int argc, char** argv)
 			cout << "-c: less argument" << endl;
 			return 2;
 		}
+		if (s == "-c: invalid argument") {
+			cout << "-c: invalid argument" << endl;
+			return 3;
+		}
 		if (s == "-s: less argument") {
 			cout << "-s: less argument" << endl;
-			return 3;
+			return 4;
 		}
 		if (s == "-m: invalid arguments") {
 			cout << "-m: invalid arguments" << endl;
-			return 4;
+			return 5;
 		}
 		if (s == "file create falied") {
 			cout << "file create falied" << endl;
-			return 5;
+			return 6;
 		}
 	}
 	return 0;

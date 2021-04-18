@@ -3,7 +3,7 @@
 Sudoku_Gen::Sudoku_Gen() :
 	Sudoku()
 {
-	srand(unsigned int(time(NULL)));
+	srand((unsigned int)(time(NULL)));
 	ifstream fin("Starting.ini");
 	for (int i = 0; i < 9; i++)
 	{
@@ -28,8 +28,8 @@ bool Sudoku_Gen::Sudoku_Init(int diff, int unique)
 	}
 	unique_excision(difficulty[diff].first);
 	random_excision(difficulty[diff].second);
-	output();
-	output2files();
+	// output();
+	output2files("game.txt");
 	difficulty.erase(difficulty.begin(), difficulty.end());
 	return true;
 }

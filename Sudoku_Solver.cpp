@@ -27,7 +27,7 @@ void Sudoku_Sol::ReadSudoku(string filename)
 		}
 		if (matrix == tempmatrix)
 			return;
-		output();
+		// output();
 		if (InvalidCheck())
 			solve();
 		else cout << "-----the Sudoku is invalid-----" << endl;
@@ -62,7 +62,7 @@ void Sudoku_Sol::solve(int dfs)
 	if (dfs == 81)
 	{
 		success = true;
-		output();
+		output2files("solve.txt");
 		return;
 	}
 	if (matrix[dfs / 9][dfs % 9] != '$')

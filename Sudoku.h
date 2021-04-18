@@ -1,8 +1,10 @@
 #pragma once
 #include<algorithm>
+#include<cstring> 
 #include<ctime>
 #include<fstream>
 #include<iostream>
+#include<ctime>
 #include<vector>
 #define square vector<vector<char>>
 using namespace std;
@@ -15,5 +17,5 @@ public:
 	~Sudoku();
 	vector<int> Possibility(int x, int y);
 	void output();
-	void output2files();
+	void output2files(string filename);
 };
